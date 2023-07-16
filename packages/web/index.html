@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>前端监控SDK</title>
+		<script src="./dist/index.js"></script>
+	</head>
+	<body>
+		<h1>这是一段内容</h1>
+		<script>
+			const sight = new persight.Starter()
+			sight.regist('PvPlugin')
+			setTimeout(() => {
+				persight.PvPlugin.getinstance().stop()
+			}, 3000)
+			setTimeout(() => {
+				persight.PvPlugin.getinstance().run()
+			}, 5000)
+		</script>
+	</body>
+</html>
