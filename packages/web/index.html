@@ -9,14 +9,8 @@
 	<body>
 		<h1>这是一段内容</h1>
 		<script>
-			const sight = new persight.Starter()
-			sight.regist('PvPlugin')
-			setTimeout(() => {
-				persight.PvPlugin.getinstance().stop()
-			}, 3000)
-			setTimeout(() => {
-				persight.PvPlugin.getinstance().run()
-			}, 5000)
+			const { PvPlugin, Starter } = fsnet
+			console.log(new PvPlugin() === new PvPlugin())
 		</script>
 	</body>
 </html>

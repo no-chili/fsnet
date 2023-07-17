@@ -1,37 +1,39 @@
-import { Plugin, PluginName, Plugins } from './types/Plugin'
-import * as ps from './plugins'
+import { Sender } from './types/Sender'
+import { Plugin, PluginList } from './types/Plugin'
+import { Constructor, createPluginInstance } from './utils/createPlugin'
 export * from './plugins'
-type Option = {
-	plugins?: Plugins
-}
 export class Starter {
-	constructor(opt: Option = {}) {
-		if (opt.plugins && opt.plugins.length > 0) {
-			opt.plugins.forEach((item) => {
-				const plugin = ps[item].getinstance()
-				this.plugins.push(plugin)
-			})
-		}
+	constructor(plugins: PluginList, sender: Sender) {
+		this.sender = sender
+		plugins.forEach((item) => {
+			const p = createPluginInstance(item)
+			p.install({ sender: this.sender })
+			this.plugins.push(p)
+		})
 		console.log('初始化')
 	}
-	private plugins: Plugin[] = []
+	private sender: Sender
+	private plugins: any[] = []
 	//是否启用
 	private state = true
 	//注册监听插件
-	regist(plugin: PluginName | Plugins) {
+	regist(plugin: Constructor<Plugin> | Array<Constructor<Plugin>>) {
 		if (Array.isArray(plugin)) {
 			plugin.forEach((item) => {
-				const plugin = ps[item].getinstance()
+				const p = createPluginInstance(item)
 				if (!this.plugins.includes(plugin)) {
-					plugin.install()
+					p.install({ sender: this.sender })
 					this.plugins.push(plugin)
 				}
 			})
 		} else {
-			const p = ps[plugin].getinstance()
-			p.install()
-			this.plugins.push(p)
+			const p = createPluginInstance(plugin)
+			if (!this.plugins.includes(plugin)) {
+				p.install({ sender: this.sender })
+				this.plugins.push(plugin)
+			}
 		}
+		return this
 	}
 	// 启动监听
 	start() {
@@ -44,7 +46,8 @@ export class Starter {
 	// 销毁监听
 	destroy() {
 		this.plugins.forEach((item) => {
-			item.uninstall()
+			const plugin = item.instance || item
+			plugin.uninstall()
 		})
 		this.plugins = []
 	}

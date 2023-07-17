@@ -1,27 +1,31 @@
 import { Plugin } from '../../types/Plugin'
+import { Sender, SenderName } from '../../types/Sender'
 import { createHistoryEvent } from '../../utils/createEvent'
-type PvOption = {}
+type PvOption = {
+	sender: Sender
+}
 export class PvPlugin implements Plugin {
-	private constructor() {}
-	static instance
-	static getinstance(): PvPlugin {
+	constructor() {
 		if (PvPlugin.instance) {
 			return PvPlugin.instance
 		}
-		PvPlugin.instance = new PvPlugin()
-		return PvPlugin.instance
+		this.init()
+		PvPlugin.instance = this
 	}
-	static hasrewrite = false
-	private controller = new AbortController()
+	static instance
+	private sender: Sender
+	// 监听控制器
+	private controller: AbortController
+	// 运行状态
 	private status = true
+	// 监听history
 	private captureEventList(list: string[]) {
 		list.forEach((item) => {
 			window.addEventListener(
 				item,
 				(e) => {
 					if (this.status) {
-						console.log(e)
-						console.log(this.controller)
+						this.sender.send()
 					}
 				},
 				{
@@ -30,21 +34,20 @@ export class PvPlugin implements Plugin {
 			)
 		})
 	}
+	// 重写history事件
 	private init() {
-		if (!PvPlugin.hasrewrite) {
-			PvPlugin.hasrewrite = true
-			window.history['pushState'] = createHistoryEvent('pushState')
-			window.history['replaceState'] = createHistoryEvent('replaceState')
-		}
+		window.history['pushState'] = createHistoryEvent('pushState')
+		window.history['replaceState'] = createHistoryEvent('replaceState')
 	}
-
-	public install(option: PvOption = {}) {
-		this.init()
+	public install(option: PvOption) {
+		this.sender = option.sender
+		this.controller = new AbortController()
 		this.captureEventList(['pushState', 'replaceState', 'popState'])
 		console.log('pv插件安装成功')
 	}
 	public uninstall() {
 		this.controller.abort()
+		PvPlugin.instance = null
 		console.log('插件卸载完成')
 	}
 	public run() {
