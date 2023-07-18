@@ -1,9 +1,15 @@
 import { Sender } from '../types/Sender'
-
+// 待完善。。。
 export class ImageSender implements Sender {
-	private url: string
-	constructor(url: string) {
-		this.url = url
+	endpoint: string
+	constructor(endpoint: string) {
+		this.endpoint = endpoint
 	}
-	public send(data) {}
+	send(data: Report): void {
+		const img = new Image(1, 1)
+		img.onerror = (event) => {
+			console.log(event)
+		}
+		img.src = this.endpoint
+	}
 }

@@ -9,8 +9,10 @@
 	<body>
 		<h1>这是一段内容</h1>
 		<script>
-			const { PvPlugin, Starter } = fsnet
-			console.log(new PvPlugin() === new PvPlugin())
+			const { PvPlugin, Starter, BeaconSender } = fsnet
+			const sender = new BeaconSender('http://localhost:9000/track')
+			const pv = new PvPlugin()
+			new Starter([], sender).regist(pv).regist(pv)
 		</script>
 	</body>
 </html>

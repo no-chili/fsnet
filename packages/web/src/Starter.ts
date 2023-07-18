@@ -1,38 +1,27 @@
 import { Sender } from './types/Sender'
 import { Plugin, PluginList } from './types/Plugin'
-import { Constructor, createPluginInstance } from './utils/createPlugin'
+import { createPluginInstance } from './utils/createPlugin'
+import { createSender } from './sender'
 export * from './plugins'
 export class Starter {
-	constructor(plugins: PluginList, sender: Sender) {
-		this.sender = sender
+	constructor(plugins: PluginList, url: string) {
+		this.sender = createSender(url)
 		plugins.forEach((item) => {
 			const p = createPluginInstance(item)
-			p.install({ sender: this.sender })
-			this.plugins.push(p)
+			p.install(this)
 		})
 		console.log('初始化')
 	}
-	private sender: Sender
-	private plugins: any[] = []
+	public sender: Sender
+	public plugins: Plugin[] = []
 	//是否启用
 	private state = true
 	//注册监听插件
-	regist(plugin: Constructor<Plugin> | Array<Constructor<Plugin>>) {
-		if (Array.isArray(plugin)) {
-			plugin.forEach((item) => {
-				const p = createPluginInstance(item)
-				if (!this.plugins.includes(plugin)) {
-					p.install({ sender: this.sender })
-					this.plugins.push(plugin)
-				}
-			})
-		} else {
-			const p = createPluginInstance(plugin)
-			if (!this.plugins.includes(plugin)) {
-				p.install({ sender: this.sender })
-				this.plugins.push(plugin)
-			}
+	regist(plugin: Plugin) {
+		if (this.plugins.includes(plugin)) {
+			return console.log('请勿重复注册')
 		}
+		plugin.install(this)
 		return this
 	}
 	// 启动监听
@@ -46,8 +35,7 @@ export class Starter {
 	// 销毁监听
 	destroy() {
 		this.plugins.forEach((item) => {
-			const plugin = item.instance || item
-			plugin.uninstall()
+			item.uninstall()
 		})
 		this.plugins = []
 	}

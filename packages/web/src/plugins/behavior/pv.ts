@@ -1,19 +1,18 @@
+import { Starter } from './../../Starter'
 import { Plugin } from '../../types/Plugin'
-import { Sender, SenderName } from '../../types/Sender'
 import { createHistoryEvent } from '../../utils/createEvent'
-type PvOption = {
-	sender: Sender
-}
+import { report } from '../../sender'
 export class PvPlugin implements Plugin {
 	constructor() {
+		const _this = PvPlugin.instance || this
 		if (PvPlugin.instance) {
 			return PvPlugin.instance
 		}
 		this.init()
 		PvPlugin.instance = this
 	}
-	static instance
-	private sender: Sender
+	static instance: PvPlugin
+	private starter: Starter
 	// 监听控制器
 	private controller: AbortController
 	// 运行状态
@@ -25,7 +24,8 @@ export class PvPlugin implements Plugin {
 				item,
 				(e) => {
 					if (this.status) {
-						this.sender.send()
+						// 这里写上报数据
+						report({})
 					}
 				},
 				{
@@ -39,15 +39,18 @@ export class PvPlugin implements Plugin {
 		window.history['pushState'] = createHistoryEvent('pushState')
 		window.history['replaceState'] = createHistoryEvent('replaceState')
 	}
-	public install(option: PvOption) {
-		this.sender = option.sender
+	public install(starter: Starter) {
 		this.controller = new AbortController()
-		this.captureEventList(['pushState', 'replaceState', 'popState'])
-		console.log('pv插件安装成功')
+		this.captureEventList(['pushState', 'replaceState', 'popstate'])
+		this.starter = starter
+		starter.plugins.push(this)
 	}
 	public uninstall() {
 		this.controller.abort()
 		PvPlugin.instance = null
+		this.starter.plugins = this.starter.plugins.filter((item) => {
+			return item !== this
+		})
 		console.log('插件卸载完成')
 	}
 	public run() {
