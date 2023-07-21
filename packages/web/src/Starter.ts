@@ -5,17 +5,20 @@ import { createSender } from './sender'
 export * from './plugins'
 export class Starter {
 	constructor(plugins: PluginList, url: string) {
+		if (Starter.instance) {
+			return Starter.instance
+		}
 		this.sender = createSender(url)
 		plugins.forEach((item) => {
 			const p = createPluginInstance(item)
 			p.install(this)
 		})
+		Starter.instance = this
 		console.log('初始化')
 	}
+	static instance: Starter
 	public sender: Sender
 	public plugins: Plugin[] = []
-	//是否启用
-	private state = true
 	//注册监听插件
 	regist(plugin: Plugin) {
 		if (this.plugins.includes(plugin)) {
@@ -24,13 +27,14 @@ export class Starter {
 		plugin.install(this)
 		return this
 	}
-	// 启动监听
-	start() {
-		this.state = true
-	}
-	// 暂停监听
-	stop() {
-		this.state = false
+	uninstallPlugin(plugins: PluginList) {
+		plugins.forEach((plugin) => {
+			this.plugins.forEach((item) => {
+				if (item instanceof plugin) {
+					item.uninstall()
+				}
+			})
+		})
 	}
 	// 销毁监听
 	destroy() {

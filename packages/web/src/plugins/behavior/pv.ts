@@ -4,14 +4,8 @@ import { createHistoryEvent } from '../../utils/createEvent'
 import { report } from '../../sender'
 export class PvPlugin implements Plugin {
 	constructor() {
-		const _this = PvPlugin.instance || this
-		if (PvPlugin.instance) {
-			return PvPlugin.instance
-		}
 		this.init()
-		PvPlugin.instance = this
 	}
-	static instance: PvPlugin
 	private starter: Starter
 	// 监听控制器
 	private controller: AbortController
@@ -47,16 +41,9 @@ export class PvPlugin implements Plugin {
 	}
 	public uninstall() {
 		this.controller.abort()
-		PvPlugin.instance = null
 		this.starter.plugins = this.starter.plugins.filter((item) => {
 			return item !== this
 		})
 		console.log('插件卸载完成')
-	}
-	public run() {
-		this.status = true
-	}
-	public stop() {
-		this.status = false
 	}
 }
