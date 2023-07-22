@@ -7,9 +7,9 @@ export class BeaconSender implements Sender {
 		this.url = url
 		window.addEventListener('visibilitychange', function logData() {
 			if (document.visibilityState === 'hidden') {
-				if (this.analyticsData.length > 0) {
-					this.send(this.analyticsData.shift())
-				}
+				// if (this.analyticsData.length > 0) {
+				// 	this.send(this.analyticsData.shift())
+				// }
 			}
 		})
 	}

@@ -1,5 +1,5 @@
 import { Starter } from '../../Starter'
-import { currentURL, report } from '../../sender'
+import { currentOption, report } from '../../sender'
 import { Plugin } from '../../types/Plugin'
 type XMLHttpRequestFormat = {
 	xhrData: {
@@ -34,7 +34,7 @@ export class HttpErrorPlugin implements Plugin {
 		XMLHttpRequest.prototype.send = function (this: XMLHttpRequestFormat, ...args) {
 			this.addEventListener('loadend', function (this: XMLHttpRequestFormat) {
 				// 过滤上报请求
-				if (currentURL !== 'url') {
+				if (currentOption.url !== this.xhrData.url) {
 					// 捕获错误，并上报
 					if (this.status > 400) {
 						let log = _this.logCallback
@@ -47,7 +47,8 @@ export class HttpErrorPlugin implements Plugin {
 								logData[key] === log[key]()
 							}
 						}
-						report(Object.assign(this.xhrData, logData))
+						// report(Object.assign(this.xhrData, logData))
+						console.log('捕获到httperror', Object.assign(this.xhrData, logData))
 					}
 				}
 			})
@@ -62,16 +63,18 @@ export class HttpErrorPlugin implements Plugin {
 					return res
 				},
 				(err) => {
-					report({
-						url,
-						sTime: new Date(),
-						type: 'FETCH',
-					})
+					// report({
+					// 	url,
+					// 	sTime: new Date(),
+					// 	type: 'FETCH',
+					// })
+					console.log('捕获到httperror', err)
 					throw err
 				}
 			)
 		}
 		starter.plugins.push(this)
+		console.log('http')
 	}
 	uninstall() {
 		// 还原

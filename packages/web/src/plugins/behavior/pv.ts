@@ -38,6 +38,7 @@ export class PvPlugin implements Plugin {
 		this.captureEventList(['pushState', 'replaceState', 'popstate'])
 		this.starter = starter
 		starter.plugins.push(this)
+		console.log('pv')
 	}
 	public uninstall() {
 		this.controller.abort()

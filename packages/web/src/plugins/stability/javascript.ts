@@ -13,6 +13,7 @@ export class JSErrorPlugin implements Plugin {
 				const target = e.target as EventTarget & { src?: string; href?: string }
 				if (target && !target.src && !target.href) {
 					// 上报jserror
+					console.log('捕获到jserror', e)
 				}
 			},
 			true
@@ -27,6 +28,7 @@ export class JSErrorPlugin implements Plugin {
 			true
 		)
 		this.starter.plugins.push(this)
+		console.log('js')
 	}
 	uninstall() {
 		this.abort()

@@ -7,12 +7,29 @@
 		<script src="./dist/index.js"></script>
 	</head>
 	<body>
-		<h1>这是一段内容</h1>
+		<h1 id="h1">这是一段内容</h1>
+		<button id="jserror">jsError</button>
+		<button id="httperror">httpError</button>
+		<button id="sourceerror">sourceError</button>
 		<script>
-			const { PvPlugin, Starter, BeaconSender } = fsnet
+			const { WhiteScreen, FPSPlugin, PerformancePlugin, PvPlugin, HttpErrorPlugin, SourceErrorPlugin, JSErrorPlugin, Starter, BeaconSender } = fsnet
 			const sender = new BeaconSender('http://localhost:9000/track')
-			const pv = new PvPlugin()
-			new Starter([], sender).regist(pv).regist(pv)
+			new Starter([WhiteScreen, FPSPlugin, PerformancePlugin, PvPlugin, HttpErrorPlugin, SourceErrorPlugin, JSErrorPlugin], sender)
+			const jsbtn = document.getElementById('jserror')
+			const httpbtn = document.getElementById('httperror')
+			const sourcebtn = document.getElementById('sourceerror')
+			const h1 = document.getElementById('h1')
+			jsbtn.addEventListener('click', () => {
+				throw new Error('yigeerror')
+			})
+			httpbtn.addEventListener('click', () => {
+				fetch('http://huidha.com')
+			})
+			sourcebtn.addEventListener('click', () => {
+				const img = window.document.createElement('img')
+				img.src = 'http://huidha.com'
+				h1.appendChild(img)
+			})
 		</script>
 	</body>
 </html>

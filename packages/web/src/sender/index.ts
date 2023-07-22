@@ -1,21 +1,22 @@
-import { Sender, SenderName } from './../types/Sender'
+import { Sender, SenderOption } from './../types/Sender'
 import { BeaconSender } from './BeaconSender'
 import { XHRSender } from './XHRSender'
 
 let currentSender: Sender
 
-export let currentURL
+// sender的配置
+export let currentOption: SenderOption
 
-export function createSender(url: string) {
-	currentURL = url
+export function createSender(option: SenderOption) {
+	currentOption = option
 	if (navigator.sendBeacon) {
-		currentSender = new BeaconSender(url)
+		currentSender = new BeaconSender(currentOption.url)
 	} else {
-		currentSender = new XHRSender(url)
+		currentSender = new XHRSender(currentOption.url)
 	}
 	return currentSender
 }
 
 export function report(data) {
-	currentSender.send(data)
+	currentSender.send(Object.assign(data, currentOption))
 }
