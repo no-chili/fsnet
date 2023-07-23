@@ -1,14 +1,14 @@
 import { Starter } from '../../Starter'
 import { Plugin } from '../../types/Plugin'
 
-export class WhiteScreen implements Plugin {
+export class WhiteScreen extends Plugin {
 	private grain: number
 	private offset: number
 	constructor(grain = 20, offset = 10) {
+		super()
 		this.grain = grain
 		this.offset = offset
 	}
-	private starter: Starter
 	install(starter: Starter) {
 		const onload = () => {
 			// 定义外层容器元素的集合
@@ -53,12 +53,6 @@ export class WhiteScreen implements Plugin {
 
 		window.addEventListener('load', onload)
 
-		this.starter = starter
-		this.starter.plugins.push(this)
-	}
-	uninstall() {
-		this.starter.plugins = this.starter.plugins.filter((item) => {
-			return item !== this
-		})
+		super.install(starter)
 	}
 }

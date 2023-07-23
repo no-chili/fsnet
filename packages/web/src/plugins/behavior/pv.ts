@@ -2,25 +2,20 @@ import { Starter } from './../../Starter'
 import { Plugin } from '../../types/Plugin'
 import { createHistoryEvent } from '../../utils/createEvent'
 import { report } from '../../sender'
-export class PvPlugin implements Plugin {
+export class PvPlugin extends Plugin {
 	constructor() {
+		super()
 		this.init()
 	}
-	private starter: Starter
 	// 监听控制器
 	private controller: AbortController
-	// 运行状态
-	private status = true
 	// 监听history
 	private captureEventList(list: string[]) {
 		list.forEach((item) => {
 			window.addEventListener(
 				item,
 				(e) => {
-					if (this.status) {
-						// 这里写上报数据
-						report({})
-					}
+					this.reportPv()
 				},
 				{
 					signal: this.controller.signal,
@@ -36,15 +31,20 @@ export class PvPlugin implements Plugin {
 	public install(starter: Starter) {
 		this.controller = new AbortController()
 		this.captureEventList(['pushState', 'replaceState', 'popstate'])
-		this.starter = starter
-		starter.plugins.push(this)
-		console.log('pv')
+		super.install(starter)
 	}
 	public uninstall() {
 		this.controller.abort()
-		this.starter.plugins = this.starter.plugins.filter((item) => {
-			return item !== this
-		})
-		console.log('插件卸载完成')
+		super.uninstall()
+	}
+	reportPv() {
+		const Today = String(new Date().getDate())
+		const lastDay = localStorage.getItem('pvtime')
+		// 同一天只上报一次
+		if (Today !== lastDay) {
+			// 内容
+			report({})
+			localStorage.setItem('pvtime', Today)
+		}
 	}
 }

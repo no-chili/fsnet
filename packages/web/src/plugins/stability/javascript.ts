@@ -1,9 +1,9 @@
 import { Starter } from '../../Starter'
+import { report } from '../../sender'
 import { Plugin } from '../../types/Plugin'
 import { createCanAbortListener } from '../../utils/createListener'
 
-export class JSErrorPlugin implements Plugin {
-	private starter: Starter
+export class JSErrorPlugin extends Plugin {
 	private abort
 	install(starter: Starter) {
 		// 监听error错误
@@ -13,27 +13,36 @@ export class JSErrorPlugin implements Plugin {
 				const target = e.target as EventTarget & { src?: string; href?: string }
 				if (target && !target.src && !target.href) {
 					// 上报jserror
-					console.log('捕获到jserror', e)
+					report({
+						type: 'jsError',
+						message: e.error.message,
+						source: e.filename,
+						lineno: e.lineno,
+						colno: e.colno,
+						stack: e.error.stack,
+					})
 				}
 			},
 			true
 		)
-		this.starter = starter
 		// 监听promise错误
 		createCanAbortListener(
 			'unhandledrejection',
 			function (e) {
-				console.log(e)
+				// 上报数据
+				report({
+					message: e.reason.message,
+					stack: e.reason.stack,
+					timeStamp: e.timeStamp,
+					type: e.type,
+				})
 			},
 			true
 		)
-		this.starter.plugins.push(this)
-		console.log('js')
+		super.install(starter)
 	}
 	uninstall() {
 		this.abort()
-		this.starter.plugins = this.starter.plugins.filter((item) => {
-			return item !== this
-		})
+		super.uninstall()
 	}
 }

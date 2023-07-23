@@ -1,7 +1,6 @@
 import { Sender } from '../types/Sender'
 
 export class BeaconSender implements Sender {
-	private analyticsData: Blob[] = []
 	private url: string
 	constructor(url: string) {
 		this.url = url
@@ -14,11 +13,9 @@ export class BeaconSender implements Sender {
 		})
 	}
 	public send(data) {
-		const content = new Blob([JSON.stringify(data)], {
-			type: 'application/x-www-form-urlencoded',
-		})
-		console.log(content)
-
-		navigator.sendBeacon(this.url, content)
+		// const content = new Blob([JSON.stringify(data)], {
+		// 	type: 'application/x-www-form-urlencoded',
+		// })
+		navigator.sendBeacon(this.url, JSON.stringify(data))
 	}
 }

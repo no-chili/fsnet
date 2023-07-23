@@ -18,5 +18,12 @@ export function createSender(option: SenderOption) {
 }
 
 export function report(data) {
+	const newData = Object.assign(
+		{
+			userAgent: navigator.userAgent,
+			language: navigator.language,
+		},
+		data
+	)
 	currentSender.send(Object.assign(data, currentOption))
 }

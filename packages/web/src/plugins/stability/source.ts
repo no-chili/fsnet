@@ -3,33 +3,27 @@ import { report } from '../../sender'
 import { Plugin } from '../../types/Plugin'
 import { getLastEvent } from '../../utils/getLastEvent'
 
-export class SourceErrorPlugin implements Plugin {
-	private starter: Starter
+export class SourceErrorPlugin extends Plugin {
 	private abort
 	install(starter: Starter) {
-		this.starter = starter
 		window.addEventListener(
 			'error',
 			function (e: ErrorEvent) {
 				let lastEvent = getLastEvent()
-				let target = e.target as EventTarget & { src?: string; href?: string }
+				let target = e.target as EventTarget & { src?: string; href?: string; baseURI?: string }
 				if (target && (target.src || target.href)) {
-					// report({
-					// 	type: 'sourceError',
-					// 	lastEvent,
-					// })
-					console.log('捕获到sourceerror', e)
+					report({
+						type: 'sourceError',
+						source: target?.baseURI,
+					})
 				}
 			},
 			true
 		)
-		this.starter.plugins.push(this)
-		console.log('source')
+		super.install(starter)
 	}
 	uninstall() {
 		this.abort()
-		this.starter.plugins = this.starter.plugins.filter((item) => {
-			return item !== this
-		})
+		super.uninstall()
 	}
 }

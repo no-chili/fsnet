@@ -1,10 +1,10 @@
-type EventTypeName = keyof WindowEventMap
+export type EventTypeName = keyof WindowEventMap
 export function createCanAbortListener<K extends EventTypeName>(event: K | K[], callback: (e: WindowEventMap[K]) => any, option?: boolean | AddEventListenerOptions) {
 	let listenerOption: AddEventListenerOptions = {}
 	if (typeof option === 'boolean') {
 		listenerOption.capture = option
 	} else {
-		listenerOption = option
+		listenerOption = option || {}
 	}
 	const controller = new AbortController()
 	if (Array.isArray(event)) {

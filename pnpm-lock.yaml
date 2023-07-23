@@ -2,6 +2,9 @@ lockfileVersion: 5.4
 
 importers:
 
+  .:
+    specifiers: {}
+
   packages/server:
     specifiers:
       cors: ^2.8.5
@@ -9,14 +12,6 @@ importers:
     dependencies:
       cors: registry.npmmirror.com/cors/2.8.5
       express: registry.npmmirror.com/express/4.18.2
-
-  packages/test:
-    specifiers:
-      '@hawkeye/web': workspace:^1.0.1
-      rollup-plugin-serve: ^2.0.2
-    dependencies:
-      '@hawkeye/web': link:../web
-      rollup-plugin-serve: registry.npmmirror.com/rollup-plugin-serve/2.0.2
 
   packages/web:
     specifiers:
@@ -27,6 +22,7 @@ importers:
       rollup-plugin-delete: ^2.0.0
       rollup-plugin-serve: ^2.0.2
       rollup-plugin-typescript2: ^0.35.0
+      tslib: ^2.6.0
       typescript: ^5.1.6
     devDependencies:
       '@babel/core': registry.npmmirror.com/@babel/core/7.22.9
@@ -36,9 +32,20 @@ importers:
       rollup-plugin-delete: registry.npmmirror.com/rollup-plugin-delete/2.0.0
       rollup-plugin-serve: registry.npmmirror.com/rollup-plugin-serve/2.0.2
       rollup-plugin-typescript2: registry.npmmirror.com/rollup-plugin-typescript2/0.35.0_typescript@5.1.6
+      tslib: 2.6.0
       typescript: registry.npmmirror.com/typescript/5.1.6
 
 packages:
+
+  /graceful-fs/4.2.11:
+    resolution: {integrity: sha512-RbJ5/jmFcNNCcDV5o9eTnBLJ/HszWV0P73bc+Ff4nS/rJj+YaS6IGyiOL0VoBYX+l1Wrl3k63h/KrH+nhJ0XvQ==}
+    requiresBuild: true
+    dev: true
+    optional: true
+
+  /tslib/2.6.0:
+    resolution: {integrity: sha512-7At1WUettjcSRHXCyYtTselblcHl9PJFFVKiCAy/bY97+BPZXSQ2wbq0P9s8tK2G7dFQfNnlJnPAiArVBVBsfA==}
+    dev: true
 
   registry.npmmirror.com/@ampproject/remapping/2.2.1:
     resolution: {integrity: sha512-lFMjJTrFL3j7L9yBxwYfCq2k6qqwHyzuUl/XBnif78PWTJYyL/dfowQHWE3sp6U6ZzqWiiIZnpTMO96zhkjwtg==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/@ampproject/remapping/-/remapping-2.2.1.tgz}
@@ -2491,7 +2498,7 @@ packages:
     dependencies:
       universalify: registry.npmmirror.com/universalify/2.0.0
     optionalDependencies:
-      graceful-fs: registry.npmmirror.com/graceful-fs/4.2.11
+      graceful-fs: 4.2.11
     dev: true
 
   registry.npmmirror.com/locate-path/5.0.0:
@@ -2602,6 +2609,7 @@ packages:
     version: 3.0.0
     engines: {node: '>=10.0.0'}
     hasBin: true
+    dev: true
 
   registry.npmmirror.com/minimatch/3.1.2:
     resolution: {integrity: sha512-J7p63hRiAjw1NDEww1W7i37+ByIrOWO5XQQAzZ3VOcL0PNybwpfmV/N05zFAzwQ9USyEcX6t3UO+K5aqBQOIHw==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/minimatch/-/minimatch-3.1.2.tgz}
@@ -2677,6 +2685,7 @@ packages:
     name: opener
     version: 1.5.2
     hasBin: true
+    dev: true
 
   registry.npmmirror.com/p-limit/2.3.0:
     resolution: {integrity: sha512-//88mFWSJx8lxCzwdAABTJL2MyWB12+eIY7MDL2SqLmAkeKU9qxRvWuSyTjm3FUmpBEMuFfckAIqEaVGUDxb6w==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/p-limit/-/p-limit-2.3.0.tgz}
@@ -2913,6 +2922,7 @@ packages:
     dependencies:
       mime: registry.npmmirror.com/mime/3.0.0
       opener: registry.npmmirror.com/opener/1.5.2
+    dev: true
 
   registry.npmmirror.com/rollup-plugin-typescript2/0.35.0_typescript@5.1.6:
     resolution: {integrity: sha512-szcIO9hPUx3PhQl91u4pfNAH2EKbtrXaES+m163xQVE5O1CC0ea6YZV/5woiDDW3CR9jF2CszPrKN+AFiND0bg==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/rollup-plugin-typescript2/-/rollup-plugin-typescript2-0.35.0.tgz}
@@ -2927,7 +2937,7 @@ packages:
       find-cache-dir: registry.npmmirror.com/find-cache-dir/3.3.2
       fs-extra: registry.npmmirror.com/fs-extra/10.1.0
       semver: registry.npmmirror.com/semver/7.5.4
-      tslib: registry.npmmirror.com/tslib/2.6.0
+      tslib: 2.6.0
       typescript: registry.npmmirror.com/typescript/5.1.6
     dev: true
 
@@ -3073,12 +3083,6 @@ packages:
     version: 1.0.1
     engines: {node: '>=0.6'}
     dev: false
-
-  registry.npmmirror.com/tslib/2.6.0:
-    resolution: {integrity: sha512-7At1WUettjcSRHXCyYtTselblcHl9PJFFVKiCAy/bY97+BPZXSQ2wbq0P9s8tK2G7dFQfNnlJnPAiArVBVBsfA==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/tslib/-/tslib-2.6.0.tgz}
-    name: tslib
-    version: 2.6.0
-    dev: true
 
   registry.npmmirror.com/type-is/1.6.18:
     resolution: {integrity: sha512-TkRKr9sUTxEH8MdfuCSP7VizJyzRNMjj2J2do2Jr3Kym598JVdEksuzPQCnlFPW4ky9Q+iA+ma9BGm06XQBy8g==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/type-is/-/type-is-1.6.18.tgz}

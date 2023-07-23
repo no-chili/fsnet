@@ -6,17 +6,14 @@ type XMLHttpRequestFormat = {
 		method: string
 		url: string
 		sTime: Date
-		type: 'XHR' | 'FETCH'
 	}
 } & XMLHttpRequest
-export class HttpErrorPlugin implements Plugin {
+export class HttpErrorPlugin extends Plugin {
 	private originOpen: (method: string, url: string | URL) => void
 	private originSend: (body?: Document | XMLHttpRequestBodyInit) => void
 	private originFetch: (input: URL | RequestInfo, init?: RequestInit) => Promise<Response>
 	private logCallback: object | Function
-	private starter: Starter
 	install(starter: Starter) {
-		this.starter = starter
 		// 重写XHR和fetch
 		const XMLHttpRequest = window.XMLHttpRequest
 		this.originOpen = this.originOpen || XMLHttpRequest.prototype.open
@@ -27,7 +24,6 @@ export class HttpErrorPlugin implements Plugin {
 				method,
 				url,
 				sTime: new Date(),
-				type: 'XHR',
 			}
 			_this.originOpen.call(this, [method, url, true])
 		}
@@ -41,14 +37,15 @@ export class HttpErrorPlugin implements Plugin {
 						if (typeof _this.logCallback === 'function') {
 							log = _this.logCallback()
 						}
+						// 上报内容
 						const logData = {}
 						for (let key of Object.keys(log)) {
 							if (typeof log[key] === 'function') {
 								logData[key] === log[key]()
 							}
 						}
-						// report(Object.assign(this.xhrData, logData))
-						console.log('捕获到httperror', Object.assign(this.xhrData, logData))
+						// console.log(this)
+						report(Object.assign(this.xhrData, logData))
 					}
 				}
 			})
@@ -63,29 +60,31 @@ export class HttpErrorPlugin implements Plugin {
 					return res
 				},
 				(err) => {
-					// report({
-					// 	url,
-					// 	sTime: new Date(),
-					// 	type: 'FETCH',
-					// })
-					console.log('捕获到httperror', err)
+					report({
+						url,
+						sTime: new Date(),
+						type: err.type,
+						message: err.reason,
+						stack: err.reason,
+						timeStamp: err.timeStamp,
+					})
+					console.log(err)
+
 					throw err
 				}
 			)
 		}
-		starter.plugins.push(this)
-		console.log('http')
+		super.install(starter)
 	}
 	uninstall() {
 		// 还原
 		window.XMLHttpRequest.prototype.open = this.originOpen
 		window.XMLHttpRequest.prototype.send = this.originSend
 		window.fetch = this.originFetch
-		this.starter.plugins = this.starter.plugins.filter((item) => {
-			item !== this
-		})
+		super.uninstall()
 	}
 	constructor(logCallback: object | Function) {
+		super()
 		this.logCallback = logCallback
 	}
 }
