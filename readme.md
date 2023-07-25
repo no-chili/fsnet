@@ -19,11 +19,17 @@ new Starter([FPSPlugin], {
 ## 支持特性
 
 错误捕获：代码报错、资源加载报错、接口请求报错
+
 性能数据：FCP、LCP、CLS、TTFB、FID、LongTask
+
 白屏检测：颗粒度配置、容错范围
+
 用户行为：行为采集、PV
+
 插件可配置：每一个插件均可添加自定义数据
+
 插件机制：所有特性都可以自定义选择
+
 卡顿检测:FPS
 
 ## 启动器 Starter
@@ -59,6 +65,7 @@ const starter = new Starter([FPSPlugin], {
 ```
 
 每一种插件均可自由配置 option
+
 example
 
 ```js
@@ -84,6 +91,9 @@ Sender 用于上报处理 log 数据，在 Starter 和 Plugin 中配置的 data 
 ## todo
 
 网络测速：接口测速、资源测速
+
 日志容灾：localstorage 备份
+
 Memory 页面内存
+
 日志去除重复
