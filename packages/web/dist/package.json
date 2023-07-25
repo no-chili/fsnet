@@ -1,0 +1,29 @@
+{
+	"name": "@fishnet/web",
+	"version": "1.0.0",
+	"description": "前端监控SDK",
+	"main": "index.js",
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+ssh://git@github.com/no-chili/fsnet.git"
+	},
+	"keywords": [
+		"@fishnet/web",
+		"sdk",
+		"monitor"
+	],
+	"author": "no-chili",
+	"license": "ISC",
+	"types": "./index.d.ts",
+	"bugs": {
+		"url": "https://github.com/no-chili/fsnet/issues"
+	},
+	"homepage": "https://github.com/no-chili/fsnet#readme",
+	"publishConfig": {
+		"access": "public",
+		"registry": "https://registry.npmjs.org/"
+	}
+}

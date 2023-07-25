@@ -1,0 +1,27 @@
+import { SourceErrorPlugin } from './plugins/stability/source';
+import { JSErrorPlugin } from './plugins/stability/javascript';
+import { HttpErrorPlugin } from './plugins/stability/http';
+import { XHRSender } from './sender/XHRSender';
+import { ImageSender } from './sender/ImageSender';
+import { BeaconSender } from './sender/BeaconSender';
+import { PvPlugin } from './plugins/behavior/pv';
+import { Starter } from './Starter';
+import { PerformancePlugin } from './plugins/performance';
+import { FPSPlugin } from './plugins/performance/fps';
+import { WhiteScreenPlugin } from './plugins/performance/whitescreen';
+import { BehaviorPlugin } from './plugins/behavior/behavior';
+declare const _default: {
+    Starter: typeof Starter;
+    PvPlugin: typeof PvPlugin;
+    BeaconSender: typeof BeaconSender;
+    ImageSender: typeof ImageSender;
+    XHRSender: typeof XHRSender;
+    HttpErrorPlugin: typeof HttpErrorPlugin;
+    JSErrorPlugin: typeof JSErrorPlugin;
+    SourceErrorPlugin: typeof SourceErrorPlugin;
+    PerformancePlugin: typeof PerformancePlugin;
+    FPSPlugin: typeof FPSPlugin;
+    WhiteScreenPlugin: typeof WhiteScreenPlugin;
+    BehaviorPlugin: typeof BehaviorPlugin;
+};
+export default _default;
