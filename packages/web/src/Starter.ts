@@ -1,6 +1,6 @@
 import { Sender } from './types/Sender'
 import { Plugin, PluginList } from './types/Plugin'
-import { createPluginInstance } from './utils/createPlugin'
+
 import { SenderOption } from './types/Sender'
 import { createSender } from './sender'
 export * from './plugins'
@@ -11,7 +11,7 @@ export class Starter {
 		}
 		this.sender = createSender(opt)
 		plugins.forEach((item) => {
-			const p = createPluginInstance(item)
+			const p = new item()
 			p.install(this)
 		})
 		Starter.instance = this

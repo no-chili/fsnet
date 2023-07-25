@@ -1,13 +1,23 @@
 import { Starter } from '../../Starter'
+import { report } from '../../sender'
 import { Plugin } from '../../types/Plugin'
-
-export class WhiteScreen extends Plugin {
+import { dataCallback } from '../../utils/dataCallback'
+type WhiteScreenPluginOption = {
+	grain?: number
+	offset?: number
+	data?: any
+	[key: string]: any
+}
+export class WhiteScreenPlugin extends Plugin {
 	private grain: number
 	private offset: number
-	constructor(grain = 20, offset = 10) {
+	private data: any
+	constructor(opt: WhiteScreenPluginOption) {
 		super()
-		this.grain = grain
-		this.offset = offset
+		this.data = opt.data
+
+		this.grain = opt.grain || 20
+		this.offset = opt.offset || 5 //可接受的白点-偏差
 	}
 	install(starter: Starter) {
 		const onload = () => {
@@ -47,8 +57,18 @@ export class WhiteScreen extends Plugin {
 				isEmpty(nodex) && emptyPoints++
 				isEmpty(nodey) && emptyPoints++
 			}
-			// 空白点的出现个数
-			console.log(emptyPoints)
+
+			// 上报白屏
+			if (emptyPoints <= grain * 2 - this.offset) {
+				const reportData = Object.assign(dataCallback(this.data), {
+					innerWidth: window.innerWidth,
+					innerHeight: window.innerHeight,
+					source: location.href,
+					type: 'whitescreen',
+				})
+
+				report(reportData)
+			}
 		}
 
 		window.addEventListener('load', onload)

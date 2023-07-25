@@ -8,7 +8,8 @@ import { PvPlugin } from './plugins/behavior/pv'
 import { Starter } from './Starter'
 import { PerformancePlugin } from './plugins/performance'
 import { FPSPlugin } from './plugins/performance/fps'
-import { WhiteScreen } from './plugins/performance/whitescreen'
+import { WhiteScreenPlugin } from './plugins/performance/whitescreen'
+import { BehaviorPlugin } from './plugins/behavior/behavior'
 
 export default {
 	Starter,
@@ -21,5 +22,6 @@ export default {
 	SourceErrorPlugin,
 	PerformancePlugin,
 	FPSPlugin,
-	WhiteScreen,
+	WhiteScreenPlugin,
+	BehaviorPlugin,
 }

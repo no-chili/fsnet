@@ -2,9 +2,18 @@ import { Starter } from '../../Starter'
 import { report } from '../../sender'
 import { Plugin } from '../../types/Plugin'
 import { createCanAbortListener } from '../../utils/createListener'
-
+import { dataCallback } from '../../utils/dataCallback'
+type JSErrorPluginOption = {
+	data?: any
+	[key: string]: any
+}
 export class JSErrorPlugin extends Plugin {
 	private abort
+	constructor(opt: JSErrorPluginOption) {
+		super()
+		this.data = opt.data
+	}
+	private data: any
 	install(starter: Starter) {
 		// 监听error错误
 		this.abort = createCanAbortListener(
@@ -13,7 +22,8 @@ export class JSErrorPlugin extends Plugin {
 				const target = e.target as EventTarget & { src?: string; href?: string }
 				if (target && !target.src && !target.href) {
 					// 上报jserror
-					report({
+
+					const reportData = Object.assign(dataCallback(this.data), {
 						type: 'jsError',
 						message: e.error.message,
 						source: e.filename,
@@ -21,6 +31,8 @@ export class JSErrorPlugin extends Plugin {
 						colno: e.colno,
 						stack: e.error.stack,
 					})
+
+					report(reportData)
 				}
 			},
 			true

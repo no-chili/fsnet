@@ -12,9 +12,9 @@
 		<button id="httperror">httpError</button>
 		<button id="sourceerror">sourceError</button>
 		<script>
-			const { WhiteScreen, FPSPlugin, PerformancePlugin, PvPlugin, HttpErrorPlugin, SourceErrorPlugin, JSErrorPlugin, Starter, BeaconSender } = fsnet
+			const { BehaviorPlugin, WhiteScreenPlugin, FPSPlugin, PerformancePlugin, PvPlugin, HttpErrorPlugin, SourceErrorPlugin, JSErrorPlugin, Starter, BeaconSender } = fsnet
 			const sender = new BeaconSender('http://localhost:9000/track')
-			new Starter([WhiteScreen, FPSPlugin, PerformancePlugin, PvPlugin, HttpErrorPlugin, SourceErrorPlugin, JSErrorPlugin], sender)
+			new Starter([BehaviorPlugin, WhiteScreenPlugin, FPSPlugin, PerformancePlugin, PvPlugin, HttpErrorPlugin, SourceErrorPlugin, JSErrorPlugin], sender)
 			const jsbtn = document.getElementById('jserror')
 			const httpbtn = document.getElementById('httperror')
 			const sourcebtn = document.getElementById('sourceerror')

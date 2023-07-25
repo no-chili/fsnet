@@ -5,6 +5,7 @@ export interface Sender {
 export type SenderOption = {
 	url: string
 	uuid?: string
+	data?: any
 	[key: string]: any
 }
 

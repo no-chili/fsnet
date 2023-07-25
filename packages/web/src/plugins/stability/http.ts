@@ -1,6 +1,7 @@
 import { Starter } from '../../Starter'
 import { currentOption, report } from '../../sender'
 import { Plugin } from '../../types/Plugin'
+import { dataCallback } from '../../utils/dataCallback'
 type XMLHttpRequestFormat = {
 	xhrData: {
 		method: string
@@ -8,7 +9,13 @@ type XMLHttpRequestFormat = {
 		sTime: Date
 	}
 } & XMLHttpRequest
+
+type HttpErrorPluginOption = {
+	data?: any
+	[key: string]: any
+}
 export class HttpErrorPlugin extends Plugin {
+	private data: any
 	private originOpen: (method: string, url: string | URL) => void
 	private originSend: (body?: Document | XMLHttpRequestBodyInit) => void
 	private originFetch: (input: URL | RequestInfo, init?: RequestInit) => Promise<Response>
@@ -44,8 +51,10 @@ export class HttpErrorPlugin extends Plugin {
 								logData[key] === log[key]()
 							}
 						}
-						// console.log(this)
-						report(Object.assign(this.xhrData, logData))
+
+						const reportData = Object.assign(dataCallback(_this.data), Object.assign(this.xhrData, logData))
+
+						report(reportData)
 					}
 				}
 			})
@@ -60,7 +69,7 @@ export class HttpErrorPlugin extends Plugin {
 					return res
 				},
 				(err) => {
-					report({
+					const reportData = Object.assign(dataCallback(this.data), {
 						url,
 						sTime: new Date(),
 						type: err.type,
@@ -68,8 +77,7 @@ export class HttpErrorPlugin extends Plugin {
 						stack: err.reason,
 						timeStamp: err.timeStamp,
 					})
-					console.log(err)
-
+					report(reportData)
 					throw err
 				}
 			)
@@ -83,8 +91,8 @@ export class HttpErrorPlugin extends Plugin {
 		window.fetch = this.originFetch
 		super.uninstall()
 	}
-	constructor(logCallback: object | Function) {
+	constructor(opt: HttpErrorPluginOption) {
 		super()
-		this.logCallback = logCallback
+		this.data = opt.data
 	}
 }

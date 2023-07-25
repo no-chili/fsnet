@@ -1,5 +1,5 @@
 import { Starter } from '../Starter'
-import { Constructor } from '../utils/createPlugin'
+export type Constructor<T> = new (...args: any[]) => T
 
 export class Plugin {
 	starter: Starter

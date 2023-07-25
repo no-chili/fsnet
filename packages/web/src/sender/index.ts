@@ -1,3 +1,4 @@
+import { dataCallback } from '../utils/dataCallback'
 import { Sender, SenderOption } from './../types/Sender'
 import { BeaconSender } from './BeaconSender'
 import { XHRSender } from './XHRSender'
@@ -22,8 +23,10 @@ export function report(data) {
 		{
 			userAgent: navigator.userAgent,
 			language: navigator.language,
+			source: location.href,
 		},
 		data
 	)
-	currentSender.send(Object.assign(data, currentOption))
+	// 添加每次请求都携带的信息
+	currentSender.send(Object.assign(newData, dataCallback(currentOption.data)))
 }
