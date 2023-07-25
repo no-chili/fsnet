@@ -1,14 +1,12 @@
-#
+# 这是一个轻量化、可插拔、可配置的前端监控 sdk
 
-这是一个轻量化、可插拔、可配置的前端监控 sdk
-
-## Installation
+## 安装
 
 ```js
 npm i @fishnet/web
 ```
 
-## Quickstart
+## 快速入门
 
 在项目的顶层
 
