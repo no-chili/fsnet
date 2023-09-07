@@ -22,10 +22,9 @@ export class Starter {
 	public plugins: Plugin[] = []
 	//注册监听插件
 	regist(plugin: Plugin) {
-		if (this.plugins.includes(plugin)) {
-			return console.log('请勿重复注册')
+		if (plugin instanceof Plugin) {
+			plugin.install(this)
 		}
-		plugin.install(this)
 		return this
 	}
 	uninstallPlugin(plugins: PluginList) {

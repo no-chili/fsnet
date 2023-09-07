@@ -15,7 +15,6 @@ export class WhiteScreenPlugin extends Plugin {
 	constructor(opt: WhiteScreenPluginOption) {
 		super()
 		this.data = opt.data
-
 		this.grain = opt.grain || 20
 		this.offset = opt.offset || 5 //可接受的白点-偏差
 	}

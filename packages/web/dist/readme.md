@@ -73,10 +73,8 @@ const fps = new FPSPlugin({
 	data: {
 		//可以是静态的数据
 		someData: 'someData',
-		otherData: () => {
-			//也可以时一个函数，他会在进行上报请求时执行
-			new Date()
-		},
+		//也可以时一个函数，他会在进行上报请求时执行
+		otherData: () => new Date(),
 	},
 })
 starter.regist(fps)

@@ -99,8 +99,6 @@ export class BehaviorPlugin extends Plugin {
 			// 收集行为
 			this.userAction.push(this.currentAction)
 
-			console.log('shoujidaole')
-
 			if (this.userAction.length > this.limit) {
 				this.reportUserAction()
 			}
